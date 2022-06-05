@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/build/gcc_debug/_deps/imgui-src/",
+                "${workspaceFolder}/build/gcc_debug/_deps/glad-build/include/"
+            ],
+            "defines": [
+                "IMGUI_IMPL_OPENGL_LOADER_GLAD"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c18",
+            "cppStandard": "gnu++20",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
