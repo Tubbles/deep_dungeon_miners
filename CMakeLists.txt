@@ -59,7 +59,10 @@ endif ()
 
 
 # Add the executable
-add_executable(deep_dungeon_miners main.cpp)
+add_executable(deep_dungeon_miners
+    main.cpp
+    gamepad.cpp
+)
 
 set_target_properties(deep_dungeon_miners PROPERTIES
     CXX_STANDARD 23
@@ -87,3 +90,9 @@ target_link_libraries(deep_dungeon_miners PUBLIC
     glfw
     imgui
 )
+
+# The additional / is important to remove the last character from the path.
+# Note that it does not matter if the OS uses / or \, because we are only
+# saving the path size.
+string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
+add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")

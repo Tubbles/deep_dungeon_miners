@@ -8,7 +8,9 @@
                 "${workspaceFolder}/build/gcc_debug/_deps/glad-build/include/"
             ],
             "defines": [
-                "IMGUI_IMPL_OPENGL_LOADER_GLAD"
+                "DEBUG",
+                "IMGUI_IMPL_OPENGL_LOADER_GLAD",
+                "SOURCE_PATH_SIZE"
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c18",
