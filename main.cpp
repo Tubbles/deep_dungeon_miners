@@ -21,6 +21,8 @@
 #include "gamepad.hpp"
 #include "util.hpp"
 
+#include <vector>
+
 struct GameState {
     bool show_main_window = false;
 } gs;
@@ -219,6 +221,12 @@ int main()
 
     glfwDestroyWindow(window);
     glfwTerminate();
+
+    std::vector<int> vec { 1, 2, 34 };
+
+    for (auto elem : vec) {
+        //
+    }
 
     return 0;
 }

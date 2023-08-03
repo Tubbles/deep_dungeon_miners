@@ -147,5 +147,4 @@ bool check_quit()
     }
     return false;
 }
-
 }

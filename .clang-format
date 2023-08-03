@@ -127,7 +127,6 @@ ColumnLimit:     120
 # ReflowComments:  true
 # ShortNamespaceLines: 1
 # SortIncludes:    CaseSensitive
-# SortJavaStaticImport: Before
 # SortUsingDeclarations: true
 # SpaceAfterCStyleCast: false
 # SpaceAfterLogicalNot: false
