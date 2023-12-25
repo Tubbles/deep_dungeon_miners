@@ -1,98 +1,36 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.25.1)
+project(sfml_tut)
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-set(OpenGL_GL_PREFERENCE GLVND)
+# Set up the main target
+set(TARGET "${PROJECT_NAME}")
+add_executable(${TARGET})
+set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 20)
 
-# Set the project name
-project(my_project_name)
+# Set version information
+set(${TARGET}_VERSION_MAJOR 1)
+set(${TARGET}_VERSION_MINOR 0)
 
-# Packages
-include(FetchContent)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+# Include modules
+add_subdirectory(modules)
+add_subdirectory(cmake_modules)
 
+# Detect and add SFML
+find_package(SFML 2.5 REQUIRED system window graphics network audio)
 find_package(fmt)
+set(OpenGL_GL_PREFERENCE GLVND)
+find_package(OpenGL REQUIRED)
+target_link_libraries(${TARGET} ${SFML_LIBRARIES} fmt::fmt OpenGL::GL)
 
-# SDL2
-find_package(SDL2)
+# Add the sources
+add_subdirectory(src)
 
-if (SDL2_FOUND)
-    if (NOT TARGET glad AND EXPECTED_COMPILER)
-        FetchContent_Declare(glad GIT_REPOSITORY https://github.com/Dav1dde/glad.git GIT_TAG df8e9e16110b305479a875399cee13daa0ccadd9)
-        FetchContent_MakeAvailable(glad)
-    endif ()
-    if (SDL2_FOUND AND EXPECTED_COMPILER)
+# Install target
+install(TARGETS ${TARGET} DESTINATION bin)
 
-    endif ()
-endif ()
+# CPack packaging
+include(InstallRequiredSystemLibraries)
+set(CPACK_PACKAGE_VERSION_MAJOR "${${TARGET}_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${${TARGET}_VERSION_MINOR}")
+include(CPack)
 
-# ImGUI
-find_package(OpenGL)
-
-FetchContent_Declare(glad GIT_REPOSITORY https://github.com/Dav1dde/glad.git GIT_TAG df8e9e16110b305479a875399cee13daa0ccadd9)
-FetchContent_MakeAvailable(glad)
-
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-
-FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.3.2)
-FetchContent_MakeAvailable(glfw)
-
-FetchContent_Declare(
-        imgui
-        GIT_REPOSITORY https://github.com/ocornut/imgui.git
-        GIT_TAG v1.77
-)
-FetchContent_GetProperties(imgui)
-
-if (NOT imgui_POPULATED)
-    FetchContent_Populate(imgui)
-    set(IMGUI_INCLUDE_DIR ${imgui_SOURCE_DIR}/)
-    file(GLOB IMGUI_SOURCES ${imgui_SOURCE_DIR}/*.cpp)
-    file(GLOB IMGUI_HEADERS ${imgui_SOURCE_DIR}/*.h)
-    add_library(imgui STATIC ${IMGUI_SOURCES} ${IMGUI_SOURCES} ${imgui_SOURCE_DIR}/examples/imgui_impl_glfw.cpp ${imgui_SOURCE_DIR}/examples/imgui_impl_opengl3.cpp)
-    add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLAD)
-
-    target_include_directories(imgui PUBLIC ${IMGUI_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${GLAD_INCLUDE_DIR})
-    target_link_libraries(imgui ${OPENGL_LIBRARIES} glfw glad)
-endif ()
-
-
-# Add the executable
-add_executable(deep_dungeon_miners
-    main.cpp
-    gamepad.cpp
-)
-
-set_target_properties(deep_dungeon_miners PROPERTIES
-    CXX_STANDARD 23
-    CXX_STANDARD_REQUIRED true
-    COMPILE_DEFINITIONS IMGUI_IMPL_OPENGL_LOADER_GLAD
-)
-
-# add_compile_definitions(IMGUI_IMPL_OPENGL_LOADER_GLAD)
-
-target_include_directories(deep_dungeon_miners
-    PUBLIC
-    ${IMGUI_INCLUDE_DIR}
-    ${OPENGL_INCLUDE_DIR}
-    ${GLFW_INCLUDE_DIR}
-    ${GLAD_INCLUDE_DIR}
-    PRIVATE
-    ${SDL2_INCLUDE_DIRS}
-)
-
-target_link_libraries(deep_dungeon_miners PUBLIC
-    fmt::fmt
-    ${SDL2_LIBRARIES}
-    glad
-    ${OPENGL_LIBRARIES}
-    glfw
-    imgui
-)
-
-# The additional / is important to remove the last character from the path.
-# Note that it does not matter if the OS uses / or \, because we are only
-# saving the path size.
-string(LENGTH "${CMAKE_SOURCE_DIR}/" SOURCE_PATH_SIZE)
-add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")

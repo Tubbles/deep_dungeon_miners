@@ -1,0 +1,28 @@
+Diagnostics:
+  # UnusedIncludes: Strict
+  ClangTidy:
+    Add: [bugprone-*,
+          clang-analyzer-core.*,
+          clang-analyzer-cplusplus.*,
+          clang-analyzer-nullability.*,
+          clang-analyzer-optin.performance.*,
+          clang-analyzer-optin.portability.*,
+          clang-analyzer-valist.*,
+          concurrency*,
+          cppcoreguidelines-*,
+          hicpp-*,
+          llvm-*,
+          misc-*,
+          modernize-*,
+          performance-*,
+          portability-*,
+          readability-*]
+  Suppress: [cppcoreguidelines-pro-type-union-access,
+             cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers,
+             hicpp-uppercase-literal-suffix,readability-uppercase-literal-suffix,
+             cppcoreguidelines-pro-type-vararg,hicpp-vararg,
+             llvm-header-guard,
+             bugprone-branch-clone,
+             clang-diagnostic-undefined-var-template]
+CompileFlags:
+  CompilationDatabase: target/debug
