@@ -10,6 +10,7 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/collision.cpp
     ${CMAKE_CURRENT_LIST_DIR}/event.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gamepad.cpp
     ${CMAKE_CURRENT_LIST_DIR}/log.cpp
 )
 

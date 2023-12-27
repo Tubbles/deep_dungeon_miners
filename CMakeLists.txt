@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25.1)
-project(sfml_tut)
+project(deep_dungeon_miners)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Set up the main target
@@ -33,4 +33,3 @@ include(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_VERSION_MAJOR "${${TARGET}_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${${TARGET}_VERSION_MINOR}")
 include(CPack)
-

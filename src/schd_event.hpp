@@ -20,9 +20,13 @@ struct Event {
     struct ShutdownEvent {};
 
     enum EventType {
-        Update,
-        Draw,
-        Shutdown,
+        // Output events
+        Update,   // payload is UpdateEvent
+        Draw,     // payload is DrawEvent
+        Shutdown, // payload is ShutdownEvent
+
+        // Input events
+        Do_Shutdown, // payload is ShutdownEvent
     };
 
     EventType type{};

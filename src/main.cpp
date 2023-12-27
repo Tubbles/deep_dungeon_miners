@@ -3,6 +3,7 @@
 #include "body.hpp"
 #include "collision.hpp"
 #include "event.hpp"
+#include "gamepad.hpp"
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "log.hpp"
@@ -37,6 +38,8 @@ auto main(int argc, char *argv[]) -> int {
     debug::setup(my_dir, window);
 #endif
 
+    gamepad::setup();
+
     col::init();
 
     sf::RectangleShape roof{{640, 10}};
@@ -59,8 +62,14 @@ auto main(int argc, char *argv[]) -> int {
     event::sfml::register_callback(event::sfml::Type::KeyPressed, 999, [&window](event::sfml::Event event) {
         if (event.key.code == sf::Keyboard::Escape) {
             window.close();
-            return event::Action::Block;
+            return event::Action::Pass;
         }
+        return event::Action::Pass;
+    });
+
+    event::schd::register_callback(event::schd::Type::Do_Shutdown, 999, [&window](event::schd::Event event) {
+        UNUSED(event);
+        window.close();
         return event::Action::Pass;
     });
 
@@ -81,7 +90,10 @@ auto main(int argc, char *argv[]) -> int {
         // Draw
         window.clear();
         // window.draw(shape);
+        // ImGui::NewFrame();
         event::schd::post(event::schd::Event{.type = event::schd::Type::Draw, .draw = {.window = &window}});
+        // ImGui::EndFrame();
+        ImGui::SFML::Render(window);
         window.display();
     }
 

@@ -5,6 +5,7 @@
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "log.hpp"
+#include "util.hpp"
 
 namespace debug {
 void setup(fs::path &my_dir, sf::RenderWindow &window) {
@@ -35,13 +36,11 @@ void setup(fs::path &my_dir, sf::RenderWindow &window) {
 
     event::schd::register_callback(event::schd::Type::Draw, 500, [&](event::schd::Event event) {
         auto &window = *event.draw.window;
+        UNUSED(window);
         if (show_imgui) {
             ImGui::Begin("FPS");
             ImGui::Text("%s", fmt::format("{:.1f}", ImGui::GetIO().Framerate).c_str());
             ImGui::End();
-            ImGui::SFML::Render(window);
-        } else {
-            ImGui::EndFrame();
         }
 
         return event::Action::Pass;
