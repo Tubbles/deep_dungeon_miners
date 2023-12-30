@@ -8,10 +8,6 @@
 #include "util.hpp"
 #include <optional>
 
-#include <SDL2/SDL_gamecontroller.h>
-
-SDL
-
 namespace gamepad {
 
 enum {
@@ -44,7 +40,7 @@ enum {
 static void update();
 
 static Instance gamepads[sf::Joystick::Count];
-static bool do_debug = true;
+static bool do_debug = false;
 
 // static void check_connection(Instance &instance) {
 //     if (sf::Joystick::isConnected(instance.id) && !instance.present) {
