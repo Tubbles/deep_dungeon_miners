@@ -8,6 +8,7 @@
 #include "imgui.h"
 #include "log.hpp"
 #include "paddle.hpp"
+#include "timer.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -53,13 +54,19 @@ auto main(int argc, char *argv[]) -> int {
 
     sf::Clock deltaClock;
 
-    event::sfml::register_callback(event::sfml::Type::Closed, 999, [&window](event::sfml::Event event) {
+    // Set up global timers
+    event::schd::register_callback(event::schd::Type::Update, 500, [&window](event::schd::Event event) {
+        Timer::update_global(event.update.delta);
+        return event::Action::Pass;
+    });
+
+    event::sfml::register_callback(event::sfml::Type::Closed, 500, [&window](event::sfml::Event event) {
         (void)event;
         window.close();
         return event::Action::Block;
     });
 
-    event::sfml::register_callback(event::sfml::Type::KeyPressed, 999, [&window](event::sfml::Event event) {
+    event::sfml::register_callback(event::sfml::Type::KeyPressed, 500, [&window](event::sfml::Event event) {
         if (event.key.code == sf::Keyboard::Escape) {
             window.close();
             return event::Action::Pass;
@@ -67,12 +74,13 @@ auto main(int argc, char *argv[]) -> int {
         return event::Action::Pass;
     });
 
-    event::schd::register_callback(event::schd::Type::Do_Shutdown, 999, [&window](event::schd::Event event) {
+    event::schd::register_callback(event::schd::Type::Do_Shutdown, 500, [&window](event::schd::Event event) {
         UNUSED(event);
         window.close();
         return event::Action::Pass;
     });
 
+    // Main game loop
     while (window.isOpen()) {
         sf::Event event{};
         while (window.pollEvent(event)) {

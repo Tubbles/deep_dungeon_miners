@@ -12,6 +12,7 @@ set(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/event.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gamepad.cpp
     ${CMAKE_CURRENT_LIST_DIR}/log.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/timer.cpp
 )
 
 # Add debug sources
