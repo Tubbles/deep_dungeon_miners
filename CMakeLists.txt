@@ -7,6 +7,17 @@ set(TARGET "${PROJECT_NAME}")
 add_executable(${TARGET})
 set_property(TARGET ${TARGET} PROPERTY CXX_STANDARD 20)
 
+# Add various project settings
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
+    add_compile_definitions(DEBUG)
+endif()
+
+if(NOT MSVC)
+    set(WARN_FLAGS "-pedantic -Wall -Wcast-align -Wconversion -Wdouble-promotion -Wduplicated-branches -Wduplicated-cond -Wextra -Wformat=2 -Wimplicit-fallthrough -Wlogical-op -Wmisleading-indentation -Wnon-virtual-dtor -Wnull-dereference -Wold-style-cast -Woverloaded-virtual -Wpedantic -Wshadow -Wsign-conversion -Wunused -Wuseless-cast -Weffc++")
+else()
+    message(FATAL_ERROR "Windows not supported yet")
+endif()
+
 # Set version information
 set(${TARGET}_VERSION_MAJOR 1)
 set(${TARGET}_VERSION_MINOR 0)

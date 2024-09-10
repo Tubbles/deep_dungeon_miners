@@ -40,5 +40,6 @@
         "variant": "cpp",
         "boundingsphere": "cpp",
         "cullsettings": "cpp"
-    }
+    },
+    "editor.formatOnSave": true
 }

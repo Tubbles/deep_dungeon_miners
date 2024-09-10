@@ -1,13 +1,11 @@
 // Copyright (C) Tubbles github.com/Tubbles
 
 #include "body.hpp"
-#include "collision.hpp"
 #include "event.hpp"
 #include "gamepad.hpp"
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "log.hpp"
-#include "paddle.hpp"
 #include "timer.hpp"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -16,7 +14,7 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <fmt/core.h>
 
-#ifndef NDEBUG
+#if defined(DEBUG)
 #include "debug.hpp"
 #endif
 
@@ -35,38 +33,38 @@ auto main(int argc, char *argv[]) -> int {
     sf::RenderWindow window(sf::VideoMode(640, 480), "SFML Tutorial");
     window.setVerticalSyncEnabled(true); // Cap at 60 Hz
 
-#ifndef NDEBUG
+#if defined(DEBUG)
     debug::setup(my_dir, window);
 #endif
 
     gamepad::setup();
 
-    col::init();
+    // col::init();
 
-    sf::RectangleShape roof{{640, 10}};
-    sf::RectangleShape floor{{640, 10}};
-    roof.setPosition(0, -10);
-    floor.setPosition(0, 480);
-    col::register_body({.shape = &roof, .is_static = true, .plasticity = std::numeric_limits<float>::infinity()});
-    col::register_body({.shape = &floor, .is_static = true, .plasticity = std::numeric_limits<float>::infinity()});
-    Paddle paddle1{Paddle::Player::One};
-    Paddle paddle2{Paddle::Player::Two};
+    // sf::RectangleShape roof{{640, 10}};
+    // sf::RectangleShape floor{{640, 10}};
+    // roof.setPosition(0, -10);
+    // floor.setPosition(0, 480);
+    // col::register_body({.shape = &roof, .is_static = true, .plasticity = std::numeric_limits<float>::infinity()});
+    // col::register_body({.shape = &floor, .is_static = true, .plasticity = std::numeric_limits<float>::infinity()});
+    // Paddle paddle1{Paddle::Player::One};
+    // Paddle paddle2{Paddle::Player::Two};
 
     sf::Clock deltaClock;
 
     // Set up global timers
-    event::schd::register_callback(event::schd::Type::Update, 500, [&window](event::schd::Event event) {
+    event::schd::register_callback(event::schd::Type::Update, PRIO_NORMAL, [&window](event::schd::Event event) {
         Timer::update_global(event.update.delta);
         return event::Action::Pass;
     });
 
-    event::sfml::register_callback(event::sfml::Type::Closed, 500, [&window](event::sfml::Event event) {
+    event::sfml::register_callback(event::sfml::Type::Closed, PRIO_NORMAL, [&window](event::sfml::Event event) {
         (void)event;
         window.close();
         return event::Action::Block;
     });
 
-    event::sfml::register_callback(event::sfml::Type::KeyPressed, 500, [&window](event::sfml::Event event) {
+    event::sfml::register_callback(event::sfml::Type::KeyPressed, PRIO_NORMAL, [&window](event::sfml::Event event) {
         if (event.key.code == sf::Keyboard::Escape) {
             window.close();
             return event::Action::Pass;
@@ -74,7 +72,7 @@ auto main(int argc, char *argv[]) -> int {
         return event::Action::Pass;
     });
 
-    event::schd::register_callback(event::schd::Type::Do_Shutdown, 500, [&window](event::schd::Event event) {
+    event::schd::register_callback(event::schd::Type::Do_Shutdown, PRIO_NORMAL, [&window](event::schd::Event event) {
         UNUSED(event);
         window.close();
         return event::Action::Pass;
@@ -84,7 +82,7 @@ auto main(int argc, char *argv[]) -> int {
     while (window.isOpen()) {
         sf::Event event{};
         while (window.pollEvent(event)) {
-#ifndef NDEBUG
+#if defined(DEBUG)
             ImGui::SFML::ProcessEvent(window, event);
 #endif
 
@@ -101,7 +99,9 @@ auto main(int argc, char *argv[]) -> int {
         // ImGui::NewFrame();
         event::schd::post(event::schd::Event{.type = event::schd::Type::Draw, .draw = {.window = &window}});
         // ImGui::EndFrame();
+#if defined(DEBUG)
         ImGui::SFML::Render(window);
+#endif
         window.display();
     }
 

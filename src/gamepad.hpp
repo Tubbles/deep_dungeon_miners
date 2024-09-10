@@ -5,13 +5,13 @@
 
 namespace gamepad {
 struct Instance {
-    int id;
+    uint id;
     bool present = false;
     unsigned char buttons[sf::Joystick::ButtonCount];
     float axes[sf::Joystick::AxisCount];
-    int num_buttons;
-    int num_axes;
-    int player;
+    uint num_buttons;
+    uint num_axes;
+    uint player;
 
     void init(int id) {
         this->id = id;

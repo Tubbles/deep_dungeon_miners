@@ -20,25 +20,25 @@ run=false
 
 usage="Usage: ${0} [options]
 where [options] can be zero or more of:
-  ?,h,help,--help    display this help text and exit
-  v,verbose          run more verbosely
-  extra-verbose      run with all verbose text
-  clang              build using clang instead of system default
-  debug,release      build for debug (default) or release target
-  clean              clean everything, does not build implicitly
-  build              build, implicitly selected
-  lint               run static analysis on the code
-  format             format all source code, does not build implicitly
-  run                run the application after a successful build, forces build
-  --                 pass the following args to the program, if running"
+  ?, h, help, --help    display this help text and exit
+  v, verbose            run more verbosely
+  extra-verbose         run with all verbose text
+  clang                 build using clang instead of system default
+  debug, release        build for debug (default) or release target
+  clean                 clean everything, does not build implicitly
+  build                 build, implicitly selected
+  lint                  run static analysis on the code
+  format                format all source code, does not build implicitly
+  run                   run the application after a successful build, forces build
+  --                    pass the following args to the program, if running"
 
 while (($#)); do
-case ${1} in
-    \?|h|help|--help)
+    case ${1} in
+    \? | h | help | --help)
         echo "${usage}"
         exit 0
         ;;
-    v|verbose)
+    v | verbose)
         verbose=true
         ;;
     extra-verbose)
@@ -69,7 +69,7 @@ case ${1} in
         implicit_build=false
         ;;
     format)
-        # format=true
+        format=true
         implicit_build=false
         ;;
     run)
@@ -85,8 +85,8 @@ case ${1} in
         echo "${usage}"
         exit 1
         ;;
-esac
-shift
+    esac
+    shift
 done
 
 cmake_debug=""
@@ -114,7 +114,9 @@ if [[ ${implicit_build} == true ]]; then
     build=true
 fi
 
-clang-format --style=file -i "${my_dir}/src/"*.{cpp,hpp}
+if [[ ${format} == true ]]; then
+    clang-format --style=file -i "${my_dir}/src/"*.{cpp,hpp}
+fi
 
 if [[ ${clean} == true ]]; then
     rm -fr "${target_dir}"
@@ -134,8 +136,8 @@ if [[ ${build} == true ]]; then
 fi
 
 if [[ ${lint} == true ]]; then
-      clang-tidy -p "${my_dir}/target/debug" "${my_dir}/src"/*.cpp
-      clang-tidy -p "${my_dir}/target/debug" --config-file="${my_dir}/.clang-tidy-fixes" --fix --format-style=file "${my_dir}/src"/*.{cpp,hpp}
+    clang-tidy -p "${my_dir}/target/debug" "${my_dir}/src"/*.cpp
+    clang-tidy -p "${my_dir}/target/debug" --config-file="${my_dir}/.clang-tidy-fixes" --fix --format-style=file "${my_dir}/src"/*.{cpp,hpp}
 fi
 
 if [[ ${run} == true ]]; then

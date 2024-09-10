@@ -25,7 +25,7 @@ struct Paddle {
             shape.setPosition({620, 240});
         }
 
-        event::sfml::register_callback(event::sfml::Type::KeyPressed, 500, [&](event::sfml::Event event) {
+        event::sfml::register_callback(event::sfml::Type::KeyPressed, PRIO_NORMAL, [&](event::sfml::Event event) {
             auto key = event.key.code;
 
             if (key == keymap[Up]) {
@@ -41,7 +41,7 @@ struct Paddle {
             return event::Action::Pass;
         });
 
-        event::sfml::register_callback(event::sfml::Type::KeyReleased, 500, [&](event::sfml::Event event) {
+        event::sfml::register_callback(event::sfml::Type::KeyReleased, PRIO_NORMAL, [&](event::sfml::Event event) {
             auto key = event.key.code;
 
             if (key == keymap[Up]) {
@@ -57,8 +57,8 @@ struct Paddle {
             return event::Action::Pass;
         });
 
-        event::schd::register_callback(event::schd::Type::Update, 500, [&](event::schd::Event event) {
-            (void)event;
+        event::schd::register_callback(event::schd::Type::Update, PRIO_NORMAL, [&](event::schd::Event event) {
+            UNUSED(event);
             // sf::Time time = event.update.delta;
             body->velocity = {0.0f, (up_vel + down_vel) * speed};
             // shape.move(body.velocity.x, body.velocity.y);
@@ -81,7 +81,7 @@ struct Paddle {
             return event::Action::Pass;
         });
 
-        event::schd::register_callback(event::schd::Type::Draw, 500, [&](event::schd::Event event) {
+        event::schd::register_callback(event::schd::Type::Draw, PRIO_NORMAL, [&](event::schd::Event event) {
             event.draw.window->draw(*body->shape);
             return event::Action::Pass;
         });

@@ -65,7 +65,7 @@ static bool do_debug = false;
 // }
 
 void setup() {
-    event::sfml::register_callback(event::sfml::Type::JoystickConnected, 500, [&](event::sfml::Event event) {
+    event::sfml::register_callback(event::sfml::Type::JoystickConnected, PRIO_NORMAL, [&](event::sfml::Event event) {
         auto jid = event.joystickConnect.joystickId;
         auto &gamepad = gamepads[jid];
         gamepad.init(jid);
@@ -95,7 +95,7 @@ void setup() {
         return event::Action::Pass;
     });
 
-    event::sfml::register_callback(event::sfml::Type::JoystickDisconnected, 500, [&](event::sfml::Event event) {
+    event::sfml::register_callback(event::sfml::Type::JoystickDisconnected, PRIO_NORMAL, [&](event::sfml::Event event) {
         auto jid = event.joystickConnect.joystickId;
 
         if (!gamepads[jid].present) {
@@ -109,7 +109,7 @@ void setup() {
         return event::Action::Pass;
     });
 
-    event::schd::register_callback(event::schd::Type::Update, 500, [&](event::schd::Event event) {
+    event::schd::register_callback(event::schd::Type::Update, PRIO_NORMAL, [&](event::schd::Event event) {
         UNUSED(event);
         // auto delta = event.update.delta;
 
@@ -118,7 +118,7 @@ void setup() {
         return event::Action::Pass;
     });
 
-    event::schd::register_callback(event::schd::Type::Draw, 500, [&](event::schd::Event event) {
+    event::schd::register_callback(event::schd::Type::Draw, PRIO_NORMAL, [&](event::schd::Event event) {
         auto &window = *event.draw.window;
         UNUSED(window);
         if (do_debug) {
@@ -190,7 +190,7 @@ void setup() {
 }
 
 static void update() {
-    for (size_t jid = 0; jid < ARR_LEN(gamepads); ++jid) {
+    for (uint jid = 0; jid < ARR_LEN(gamepads); ++jid) {
         auto &gamepad = gamepads[jid];
 
         if (gamepad.present) {
@@ -211,7 +211,7 @@ static void update() {
                 sf::Joystick::Axis::U, sf::Joystick::Axis::V, sf::Joystick::Axis::PovX, sf::Joystick::Axis::PovY,
             };
 
-            for (int i = 0; i < gamepad.num_axes; ++i) {
+            for (uint i = 0; i < gamepad.num_axes; ++i) {
                 axes[i] = sf::Joystick::getAxisPosition(jid, axis[i]);
             }
 

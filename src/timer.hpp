@@ -18,16 +18,16 @@ struct Timer {
     bool is_one_shot = false;
     size_t num_fires = {};
 
-    Timer(sf::Time period, Callback callback, bool is_one_shot = false)
-        : period(period), callback(callback), is_one_shot(is_one_shot) {}
+    Timer(sf::Time period_, Callback callback_, bool is_one_shot_ = false)
+        : period(period_), callback(callback_), is_one_shot(is_one_shot_) {}
 
-    void update(sf::Time time) {
-        this->time = this->time + time;
-        this->total_accumulated_time += time;
-        if (this->time > this->period) {
-            this->time -= this->period;
-            this->callback();
-            this->num_fires += 1;
+    void update(sf::Time time_) {
+        time = time + time_;
+        total_accumulated_time += time_;
+        if (time > period) {
+            time -= period;
+            callback();
+            num_fires += 1;
         }
     }
 
@@ -50,15 +50,4 @@ struct Timer {
             }
         }
     }
-
-    // bool operator==(const Timer &other) {
-    //     // clang-format off
-    //     return
-    //         this->time == other.time &&
-    //         this->period == other.period &&
-    //         this->total_accumulated_time == other.total_accumulated_time &&
-    //         &this->callback == &other.callback && // Callbacks need to be the exactly same object
-    //         this->is_one_shot == other.is_one_shot;
-    //     // clang-format on
-    // }
 };

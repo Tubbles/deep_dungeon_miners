@@ -3,7 +3,7 @@
 # add_subdirectory(imgui)
 # add_subdirectory(imgui-sfml)
 
-target_include_directories(${TARGET} PRIVATE
+target_include_directories(${TARGET} SYSTEM PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/imgui
     ${CMAKE_CURRENT_LIST_DIR}/imgui-sfml
 )
